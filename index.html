@@ -9,10 +9,8 @@
 <meta name="apple-mobile-web-app-title" content="FlickIt">
 <meta name="description" content="Realistic Zippo lighter simulator with flame physics, smoke particles, and concert mode.">
 <title>FlickIt – Virtual Lighter</title>
-
 <!-- PWA Manifest (inline base64) -->
 <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiRmxpY2tJdCDigJMgVmlydHVhbCBMaWdodGVyIiwic2hvcnRfbmFtZSI6IkZsaWNrSXQiLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxMTExMTEiLCJ0aGVtZV9jb2xvciI6IiMxMTExMTEiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaUlIQnlaWE5sY25abFFYTndaV04wVW1GMGFXODlJbmhOYVc1WlRXbHVJRzFsWlhRaUlIWnBaWGRDYjNnOUlqQWdNQ0F4TmpBZ01UWXdJajQ4Y21WamRDQjNhV1IwYUQwaU1UWXdJaUJvWldsbmFIUTlJakUyTUNJZ1ptbHNiRDBpSTBVd1JUQWlJSEpsY0c5eWRHbHZiajBpZUUxaGJpd2dkbUZ5WVhraUlEeHlaV04wSUhkcFpIUm9QU0l4TmpBaUlHaGxhV2RvZEQwaU1UWXdJaUJ6ZEhsc1pUMGliV0ZqYUc4dVpHVm1ZWFZzZERzaUlERXdNREE4TDNKbFkzUStQQzl6ZG1jKyIsInR5cGUiOiJpbWFnZS9zdmcreG1sIiwic2l6ZXMiOiIxNjB4MTYwIn1dfQ==">
-
 <style>
   /* ===== CSS VARIABLES ===== */
   :root {
@@ -34,7 +32,6 @@
     --font-display: 'Georgia', 'Times New Roman', serif;
     --font-body: 'Helvetica Neue', Helvetica, sans-serif;
   }
-
   /* ===== RESET & BASE ===== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
@@ -47,7 +44,6 @@
     touch-action: none;
     user-select: none;
   }
-
   /* ===== MAIN LAYOUT ===== */
   #app {
     width: 100vw; height: 100vh;
@@ -55,7 +51,6 @@
     align-items: center; justify-content: flex-start;
     position: relative; overflow: hidden;
   }
-
   /* Background gradient */
   #app::before {
     content: '';
@@ -65,7 +60,6 @@
                 linear-gradient(180deg, #090909 0%, #0f0f0f 50%, #0a0a0a 100%);
     pointer-events: none; z-index: 0;
   }
-
   /* ===== TOP BAR ===== */
   #topbar {
     width: 100%; max-width: 420px;
@@ -94,7 +88,6 @@
     background: rgba(255,255,255,0.12); transform: scale(0.92);
   }
   #concert-btn.active { color: #ff44aa; border-color: #ff44aa; box-shadow: 0 0 14px #ff44aa66; }
-
   /* ===== COUNTER BAR ===== */
   #counter-bar {
     width: 100%; max-width: 420px;
@@ -110,14 +103,12 @@
   }
   .counter-lbl { font-size: 9px; letter-spacing: 1.5px; color: var(--text-dim); text-transform: uppercase; }
   .counter-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.1); }
-
   /* ===== CANVAS ===== */
   #flame-canvas {
     position: absolute; top: 0; left: 0;
     width: 100%; height: 100%;
     z-index: 2; pointer-events: none;
   }
-
   /* ===== LIGHTER WRAPPER ===== */
   #lighter-area {
     position: relative; z-index: 5;
@@ -126,7 +117,6 @@
     padding-bottom: 10px;
     width: 100%; max-width: 420px;
   }
-
   /* ===== SKIN SELECTOR ===== */
   #skin-bar {
     display: flex; align-items: center; gap: 10px;
@@ -150,7 +140,6 @@
   #skin-gold { background: linear-gradient(135deg, #c9a84c, #7a5c1e, #e8cc6a, #9a7c3a); }
   #skin-neon { background: linear-gradient(135deg, #00ffcc, #0044ff, #ff00cc, #6600ff); }
   #skin-dragon { background: linear-gradient(135deg, #8b0000, #ff4400, #2a0000, #cc2200); }
-
   /* ===== THE LIGHTER SVG WRAPPER ===== */
   #lighter-container {
     position: relative;
@@ -164,17 +153,14 @@
             drop-shadow(0 0 30px var(--glow))
             drop-shadow(0 0 60px rgba(255,120,0,0.3));
   }
-
   /* ===== LIGHTER SVG ===== */
   #lighter-svg { width: 100%; height: 100%; overflow: visible; }
-
   /* Lid transforms */
   #lid-group {
     transform-origin: 80px 108px; /* hinge point */
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   #lid-group.open { transform: rotate(-105deg); }
-
   /* ===== FLINT WHEEL ===== */
   #wheel-area {
     position: absolute;
@@ -185,7 +171,6 @@
   }
   #wheel-svg { width: 100%; height: 100%; }
   .wheel-rot { transform-origin: 18px 18px; transition: transform 0.1s; }
-
   /* ===== INSTRUCTIONS ===== */
   #hint {
     font-size: 11px; letter-spacing: 1.5px; color: var(--text-dim);
@@ -193,7 +178,6 @@
     margin-top: 14px;
     transition: opacity 0.5s;
   }
-
   /* ===== CIGARETTE ===== */
   #cigarette-wrap {
     margin-top: 12px;
@@ -211,7 +195,6 @@
   .cig-label {
     font-size: 10px; letter-spacing: 1px; color: var(--text-dim); text-transform: uppercase;
   }
-
   /* ===== FLAME COLOR PICKER ===== */
   #color-bar {
     display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
@@ -233,7 +216,6 @@
   #c-green { background: radial-gradient(#aaff44, #006600); }
   #c-purple { background: radial-gradient(#cc44ff, #440088); }
   #c-red { background: radial-gradient(#ff8888, #cc0000); }
-
   /* ===== PANELS (stats, settings) ===== */
   .panel {
     position: fixed; inset: 0; z-index: 100;
@@ -282,7 +264,6 @@
   .btn-primary { background: linear-gradient(135deg, #ff6a00, #ee0979); color: #fff; }
   .btn-secondary { background: rgba(255,255,255,0.08); color: var(--text); }
   .btn-gold { background: linear-gradient(135deg, var(--gold), #7a5c1e); color: #fff; }
-
   /* ===== PREMIUM SKIN CARDS ===== */
   .skin-card {
     display: flex; align-items: center; gap: 14px;
@@ -296,7 +277,6 @@
   .skin-name { font-size: 14px; font-weight: 600; color: var(--text); }
   .skin-price { font-size: 11px; color: var(--gold); margin-top: 2px; }
   .btn-buy { padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; }
-
   /* ===== AD BANNER ===== */
   #ad-banner {
     width: 100%; max-width: 420px;
@@ -309,7 +289,6 @@
     position: relative; z-index: 10;
     flex-shrink: 0;
   }
-
   /* ===== INTERSTITIAL AD OVERLAY ===== */
   #interstitial {
     position: fixed; inset: 0; z-index: 200;
@@ -335,7 +314,6 @@
     color: var(--text); padding: 12px 32px; border-radius: 10px;
     font-size: 14px; cursor: pointer;
   }
-
   /* ===== MIC PERMISSION PROMPT ===== */
   #mic-prompt {
     position: fixed; inset: 0; z-index: 150;
@@ -352,7 +330,6 @@
   .prompt-icon { font-size: 52px; margin-bottom: 14px; }
   .prompt-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
   .prompt-body { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 20px; }
-
   /* ===== TOAST ===== */
   #toast {
     position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -363,7 +340,6 @@
     white-space: nowrap;
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
   /* ===== CONCERT MODE ===== */
   #concert-overlay {
     position: fixed; inset: 0; z-index: 1;
@@ -372,18 +348,17 @@
     background: transparent;
   }
   #concert-overlay.active { opacity: 1; }
-
   /* ===== SHARE BUTTON ===== */
   #share-btn {
     position: fixed; bottom: 62px; right: 20px; z-index: 10;
-    width: 44px; height: 44px; border-radius: 12px;
+    width: 44px; height: 44px;
+    border-radius: 12px;
     background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.1);
     color: var(--text-dim); font-size: 18px;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; transition: all 0.2s;
   }
   #share-btn:active { background: rgba(255,255,255,0.12); transform: scale(0.92); }
-
   /* ===== INSTALL PROMPT ===== */
   #install-banner {
     position: fixed; top: 0; left: 0; right: 0; z-index: 200;
@@ -399,7 +374,6 @@
   }
   #install-yes { background: var(--accent); color: #fff; border: none; }
   #install-no { background: transparent; color: var(--text-dim); border: 1px solid rgba(255,255,255,0.1); }
-
   /* Spark burst */
   @keyframes sparkBurst {
     0% { transform: scale(0) rotate(0deg); opacity: 1; }
@@ -416,13 +390,10 @@
 </style>
 </head>
 <body>
-
 <!-- Concert color pulse overlay -->
 <div id="concert-overlay"></div>
-
 <!-- Main App -->
 <div id="app">
-
   <!-- Top Bar -->
   <div id="topbar">
     <div class="app-title">Flick<span>It</span></div>
@@ -432,7 +403,6 @@
       <button id="settings-btn" title="Settings & Skins">⚙️</button>
     </div>
   </div>
-
   <!-- Counter Bar -->
   <div id="counter-bar">
     <div class="counter-item">
@@ -450,13 +420,10 @@
       <div class="counter-lbl">Streak 🔥</div>
     </div>
   </div>
-
   <!-- Flame Canvas (behind lighter) -->
   <canvas id="flame-canvas"></canvas>
-
   <!-- Lighter Area -->
   <div id="lighter-area">
-
     <!-- Flame Color Picker -->
     <div id="color-bar">
       <div class="color-dot active" id="c-orange" data-color="orange" title="Orange"></div>
@@ -471,7 +438,6 @@
         <div class="lock-mini">🔒</div>
       </div>
     </div>
-
     <!-- Skin Selector -->
     <div id="skin-bar">
       <div class="skin-thumb active" id="skin-chrome" data-skin="chrome" title="Chrome"></div>
@@ -485,7 +451,6 @@
         <div class="lock-overlay">🔒</div>
       </div>
     </div>
-
     <!-- The Lighter -->
     <div id="lighter-container">
       <!-- Lighter SVG -->
@@ -550,7 +515,6 @@
             <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
           </linearGradient>
         </defs>
-
         <!-- === BODY === -->
         <!-- Main body -->
         <rect id="body-rect" x="20" y="108" width="120" height="156" rx="6" fill="url(#bodyGrad)"/>
@@ -586,7 +550,6 @@
         <!-- Hinge bar -->
         <rect x="72" y="105" width="16" height="8" rx="2" fill="url(#hingeGrad)"/>
         <rect x="74" y="106" width="12" height="6" rx="1" fill="rgba(255,255,255,0.15)"/>
-
         <!-- === CHIMNEY (always visible) === -->
         <rect id="chimney" x="50" y="88" width="60" height="24" rx="4" fill="url(#tubeGrad)"/>
         <rect x="52" y="90" width="56" height="20" rx="3" fill="rgba(0,0,0,0.5)"/>
@@ -595,7 +558,6 @@
         <ellipse cx="80" cy="92" rx="16" ry="3" fill="#0a0a0a"/>
         <!-- Chimney shine -->
         <rect x="56" y="93" width="4" height="14" rx="2" fill="rgba(255,255,255,0.12)"/>
-
         <!-- === LID GROUP === -->
         <g id="lid-group">
           <!-- Lid body -->
@@ -620,7 +582,6 @@
           <text x="80" y="64" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="rgba(255,255,255,0.5)" letter-spacing="3">ZIPPO</text>
           <text x="80" y="74" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="rgba(255,255,255,0.3)" letter-spacing="1">EST. 1932</text>
         </g>
-
         <!-- === FLINT WHEEL === -->
         <g id="wheel-group" transform="translate(118, 108)">
           <!-- Wheel housing -->
@@ -636,10 +597,8 @@
             <circle r="1.5" fill="#999"/>
           </g>
         </g>
-
       </svg>
     </div>
-
     <!-- Cigarette Row -->
     <div id="cigarette-wrap">
       <div id="cig-svg-wrap">
@@ -674,23 +633,16 @@
       </div>
       <span class="cig-label">Hold to puff</span>
     </div>
-
     <!-- Hint text -->
     <div id="hint">Swipe up to open · Flick wheel to light</div>
-
   </div><!-- /lighter-area -->
-
   <!-- Ad Banner -->
   <div id="ad-banner">📢 AdMob Banner Here — 320×50</div>
-
 </div><!-- /app -->
-
 <!-- Share Button -->
 <button id="share-btn" title="Share">📤</button>
-
 <!-- Toast -->
 <div id="toast"></div>
-
 <!-- ===== STATS PANEL ===== -->
 <div id="stats-panel" class="panel">
   <div class="panel-card">
@@ -707,13 +659,11 @@
     </div>
   </div>
 </div>
-
 <!-- ===== SETTINGS / SKINS PANEL ===== -->
 <div id="settings-panel" class="panel">
   <div class="panel-card">
     <div class="panel-title">🎨 SKINS & SETTINGS</div>
     <button class="panel-close" id="close-settings">✕</button>
-
     <div class="skin-card">
       <div class="skin-preview-big" style="background:linear-gradient(135deg,#c0c0c0,#808080,#e0e0e0,#606060)"></div>
       <div class="skin-info">
@@ -753,7 +703,6 @@
     </div>
   </div>
 </div>
-
 <!-- ===== MIC PERMISSION PROMPT ===== -->
 <div id="mic-prompt">
   <div class="prompt-card">
@@ -766,7 +715,6 @@
     </div>
   </div>
 </div>
-
 <!-- ===== INTERSTITIAL AD ===== -->
 <div id="interstitial">
   <div class="ad-placeholder">
@@ -776,14 +724,12 @@
   </div>
   <button id="skip-ad-btn">Skip Ad ›</button>
 </div>
-
 <!-- ===== INSTALL BANNER ===== -->
 <div id="install-banner">
   <span class="install-txt">Add <strong>FlickIt</strong> to your home screen!</span>
   <button id="install-yes">Install</button>
   <button id="install-no">✕</button>
 </div>
-
 <!-- ===== SERVICE WORKER SCRIPT ===== -->
 <script>
 // Register inline service worker for offline support
@@ -804,886 +750,773 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register(swUrl).catch(()=>{});
 }
 </script>
-
 <!-- ===== MAIN APP SCRIPT ===== -->
 <script>
 (function() {
-'use strict';
+  'use strict';
 
-// ========================
-// STATE
-// ========================
-const state = {
-  isOpen: false,          // lid open
-  isLit: false,           // flame burning
-  flameColor: 'orange',   // current flame color
-  skin: 'chrome',         // current skin
-  concertMode: false,
-  micEnabled: false,
-  micAsked: false,
-  wheelAngle: 0,
-  litCount: 0,
-  litToday: 0,
-  litTotal: 0,
-  litStreak: 0,
-  puffCount: 0,
-  concertCount: 0,
-  tiltX: 0,               // device tilt for wind
-  tiltY: 0,
-  micVolume: 0,           // blow detection volume
-  lastLitDate: '',
-  interstitialCounter: 0,
-  isPuffing: false,
-};
-
-// Load from localStorage
-function loadStats() {
-  try {
-    const d = JSON.parse(localStorage.getItem('flickit_stats') || '{}');
-    state.litTotal = d.litTotal || 0;
-    state.puffCount = d.puffCount || 0;
-    state.concertCount = d.concertCount || 0;
-    state.litStreak = d.litStreak || 0;
-    state.lastLitDate = d.lastLitDate || '';
-    // Today count
-    const today = new Date().toDateString();
-    state.litToday = (d.lastLitDate === today) ? (d.litToday || 0) : 0;
-  } catch(e) {}
-}
-function saveStats() {
-  try {
-    const today = new Date().toDateString();
-    localStorage.setItem('flickit_stats', JSON.stringify({
-      litTotal: state.litTotal,
-      litToday: state.litToday,
-      puffCount: state.puffCount,
-      concertCount: state.concertCount,
-      litStreak: state.litStreak,
-      lastLitDate: today,
-    }));
-  } catch(e) {}
-}
-function updateCounterUI() {
-  document.getElementById('cnt-today').textContent = state.litToday;
-  document.getElementById('cnt-total').textContent = state.litTotal;
-  document.getElementById('cnt-streak').textContent = state.litStreak;
-  document.getElementById('sp-today').textContent = state.litToday;
-  document.getElementById('sp-total').textContent = state.litTotal;
-  document.getElementById('sp-streak').textContent = state.litStreak + ' 🔥';
-  document.getElementById('sp-puffs').textContent = state.puffCount;
-  document.getElementById('sp-concert').textContent = state.concertCount;
-}
-
-loadStats();
-updateCounterUI();
-
-// ========================
-// AUDIO ENGINE (Web Audio API)
-// ========================
-let audioCtx = null;
-function getAudioCtx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  return audioCtx;
-}
-
-// Generate sounds procedurally (no external files needed)
-function playClick() {
-  try {
-    const ctx = getAudioCtx();
-    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) {
-      d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.015));
-    }
-    const src = ctx.createBufferSource();
-    const gain = ctx.createGain();
-    gain.gain.value = 0.6;
-    src.buffer = buf;
-    src.connect(gain); gain.connect(ctx.destination);
-    src.start();
-  } catch(e) {}
-}
-
-function playSpark() {
-  try {
-    const ctx = getAudioCtx();
-    const dur = 0.12;
-    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) {
-      const t = i / ctx.sampleRate;
-      d[i] = (Math.random() * 2 - 1) * Math.exp(-t * 30) + Math.sin(2*Math.PI*3000*t) * Math.exp(-t * 50) * 0.3;
-    }
-    const src = ctx.createBufferSource();
-    const gain = ctx.createGain(); gain.gain.value = 0.5;
-    src.buffer = buf; src.connect(gain); gain.connect(ctx.destination);
-    src.start();
-  } catch(e) {}
-}
-
-function playFlame() {
-  try {
-    const ctx = getAudioCtx();
-    // Flame whoosh: band-pass filtered noise
-    const dur = 1.5;
-    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) {
-      d[i] = (Math.random() * 2 - 1) * 0.3;
-    }
-    const src = ctx.createBufferSource();
-    const bpf = ctx.createBiquadFilter();
-    bpf.type = 'bandpass'; bpf.frequency.value = 400; bpf.Q.value = 0.8;
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.1);
-    gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + dur);
-    src.buffer = buf;
-    src.connect(bpf); bpf.connect(gain); gain.connect(ctx.destination);
-    src.start();
-    setTimeout(() => { try { src.stop(); } catch(e){} }, dur * 1000);
-    return { src, gain };
-  } catch(e) {}
-}
-
-function playPuff() {
-  try {
-    const ctx = getAudioCtx();
-    const dur = 0.4;
-    const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i++) {
-      const t = i / ctx.sampleRate;
-      d[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * t / dur) * 0.4;
-    }
-    const src = ctx.createBufferSource();
-    const lpf = ctx.createBiquadFilter(); lpf.type = 'lowpass'; lpf.frequency.value = 800;
-    const gain = ctx.createGain(); gain.gain.value = 0.4;
-    src.buffer = buf; src.connect(lpf); lpf.connect(gain); gain.connect(ctx.destination);
-    src.start();
-  } catch(e) {}
-}
-
-// ========================
-// CANVAS & PARTICLE SYSTEM
-// ========================
-const canvas = document.getElementById('flame-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-let smokeParticles = [];
-let flameAlpha = 0; // 0=off, 1=full
-
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-// Get lighter chimney world position
-function getFlameOrigin() {
-  const lc = document.getElementById('lighter-container');
-  if (!lc) return { x: window.innerWidth/2, y: window.innerHeight/2 };
-  const rect = lc.getBoundingClientRect();
-  // Chimney is at ~50% x, ~32% y of the container (SVG coords 80, 88 out of 160, 280)
-  return {
-    x: rect.left + rect.width * 0.5,
-    y: rect.top + rect.height * (88/280)
+  // ========================
+  // STATE
+  // ========================
+  const state = {
+    isOpen: false,
+    isLit: false,
+    flameColor: 'orange',
+    skin: 'chrome',
+    concertMode: false,
+    micEnabled: false,
+    micAsked: false,
+    wheelAngle: 0,
+    litToday: 0,
+    litTotal: 0,
+    litStreak: 0,
+    puffCount: 0,
+    concertCount: 0,
+    tiltX: 0,
+    tiltY: 0,
+    micVolume: 0,
+    lastLitDate: '',
+    interstitialCounter: 0,
+    isPuffing: false,
   };
-}
 
-// Get cigarette tip world position
-function getCigTipPos() {
-  const wrap = document.getElementById('cigarette-wrap');
-  if (!wrap || !state.isLit) return null;
-  const rect = document.getElementById('cig-svg').getBoundingClientRect();
-  return {
-    x: rect.left + rect.width * (13/180),
-    y: rect.top + rect.height * 0.5
-  };
-}
-
-// Flame color schemes
-const FLAME_COLORS = {
-  orange: { base: ['#ff6a00','#ff9800','#ffcc00','#ff3300'], blue: '#4455ff', core: '#fff9e6' },
-  blue:   { base: ['#2244ff','#4488ff','#88ccff','#0022dd'], blue: '#001199', core: '#eeffff' },
-  green:  { base: ['#00aa22','#44ff44','#aaff00','#006600'], blue: '#004400', core: '#eeffcc' },
-  purple: { base: ['#8800ff','#cc44ff','#ff88ff','#550099'], blue: '#330055', core: '#fff0ff' },
-  red:    { base: ['#cc0000','#ff2200','#ff6600','#880000'], blue: '#440000', core: '#fff5f5' },
-};
-
-// Flame particle class
-class FlameParticle {
-  constructor(ox, oy) {
-    this.reset(ox, oy);
+  function loadStats() {
+    try {
+      const d = JSON.parse(localStorage.getItem('flickit_stats') || '{}');
+      state.litTotal = d.litTotal || 0;
+      state.puffCount = d.puffCount || 0;
+      state.concertCount = d.concertCount || 0;
+      state.litStreak = d.litStreak || 0;
+      state.lastLitDate = d.lastLitDate || '';
+      const today = new Date().toDateString();
+      state.litToday = (d.lastLitDate === today) ? (d.litToday || 0) : 0;
+    } catch(e) {}
   }
-  reset(ox, oy) {
-    this.x = ox + (Math.random() - 0.5) * 16;
-    this.y = oy;
-    const intensity = 1 + state.micVolume * 2;
-    this.vx = (Math.random() - 0.5) * 1.2 + state.tiltX * 0.8;
-    this.vy = -(2.5 + Math.random() * 2.5) * intensity;
-    this.life = 1.0;
-    this.maxLife = 0.6 + Math.random() * 0.5;
-    this.decay = 1.0 / (this.maxLife * 60);
-    this.size = 8 + Math.random() * 18;
-    const colors = FLAME_COLORS[state.flameColor];
-    this.color = colors.base[Math.floor(Math.random() * colors.base.length)];
-    this.isBlue = Math.random() < 0.25;
-    if (this.isBlue) { this.color = colors.blue; this.size *= 0.6; }
+
+  function saveStats() {
+    try {
+      const today = new Date().toDateString();
+      localStorage.setItem('flickit_stats', JSON.stringify({
+        litTotal: state.litTotal,
+        litToday: state.litToday,
+        puffCount: state.puffCount,
+        concertCount: state.concertCount,
+        litStreak: state.litStreak,
+        lastLitDate: today,
+      }));
+    } catch(e) {}
   }
-}
 
-// Smoke particle class
-class SmokeParticle {
-  constructor(ox, oy) {
-    this.x = ox + (Math.random() - 0.5) * 10;
-    this.y = oy;
-    const speed = state.isPuffing ? (1 + state.micVolume * 3) : 0.5;
-    this.vx = (Math.random() - 0.5) * 0.8 + state.tiltX * 0.3;
-    this.vy = -(0.6 + Math.random() * 1.0) * speed;
-    this.life = 1.0;
-    this.decay = 0.005 + Math.random() * 0.006;
-    this.size = 6 + Math.random() * 14;
-    this.growRate = 0.15 + Math.random() * 0.2;
-    this.alpha = 0.0;
-    this.fadeIn = true;
+  function updateCounterUI() {
+    document.getElementById('cnt-today').textContent = state.litToday;
+    document.getElementById('cnt-total').textContent = state.litTotal;
+    document.getElementById('cnt-streak').textContent = state.litStreak;
+    document.getElementById('sp-today').textContent = state.litToday;
+    document.getElementById('sp-total').textContent = state.litTotal;
+    document.getElementById('sp-streak').textContent = state.litStreak + ' 🔥';
+    document.getElementById('sp-puffs').textContent = state.puffCount;
+    document.getElementById('sp-concert').textContent = state.concertCount;
   }
-}
 
-// ========================
-// LIGHTER LID + WHEEL
-// ========================
-const lidGroup = document.getElementById('lid-group');
-const wheelSpin = document.getElementById('wheel-spin');
-const lighterContainer = document.getElementById('lighter-container');
-const cigaretteWrap = document.getElementById('cigarette-wrap');
-const hint = document.getElementById('hint');
-
-let wheelAngle = 0;
-let isAnimatingWheel = false;
-
-function openLid() {
-  if (state.isOpen) return;
-  state.isOpen = true;
-  lidGroup.classList.add('open');
-  playClick();
-  hint.textContent = 'Drag the wheel to spark · Tap to close';
-  setTimeout(() => {
-    if (!state.isLit) {
-      hint.textContent = 'Flick the wheel to ignite 🔥';
-    }
-  }, 800);
-}
-
-function closeLid() {
-  if (!state.isOpen) return;
-  state.isOpen = false;
-  lidGroup.classList.remove('open');
-  if (state.isLit) extinguish();
-  playClick();
-  hint.textContent = 'Swipe up to open · Flick wheel to light';
-}
-
-function ignite() {
-  if (state.isLit || !state.isOpen) return;
-  state.isLit = true;
-  flameAlpha = 0;
-  lighterContainer.classList.add('glowing');
-  playFlame();
-  // Update stats
-  state.litTotal++;
-  state.litToday++;
-  state.litStreak = (state.litStreak < state.litTotal) ? state.litStreak + 1 : state.litStreak;
-  saveStats();
+  loadStats();
   updateCounterUI();
-  cigaretteWrap.classList.add('visible');
-  hint.textContent = 'Tilt to sway flame · Blow to intensify 🌬️';
-  // Interstitial every 5 lights
-  state.interstitialCounter++;
-  if (state.interstitialCounter % 5 === 0) {
-    setTimeout(showInterstitial, 2000);
+
+  // ========================
+  // AUDIO
+  // ========================
+  let audioCtx = null;
+  function getAudioCtx() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
   }
-  // Mic prompt
-  if (!state.micAsked) {
-    state.micAsked = true;
-    setTimeout(() => { document.getElementById('mic-prompt').classList.add('open'); }, 1800);
+
+  function playClick() {
+    try {
+      const ctx = getAudioCtx();
+      const buf = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) {
+        d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.015));
+      }
+      const src = ctx.createBufferSource();
+      const gain = ctx.createGain();
+      gain.gain.value = 0.6;
+      src.buffer = buf;
+      src.connect(gain); gain.connect(ctx.destination);
+      src.start();
+    } catch(e) {}
   }
-}
 
-function extinguish() {
-  if (!state.isLit) return;
-  state.isLit = false;
-  flameAlpha = 0;
-  lighterContainer.classList.remove('glowing');
-  particles = [];
-  cigaretteWrap.classList.remove('visible');
-  hint.textContent = state.isOpen ? 'Flick the wheel to ignite 🔥' : 'Swipe up to open · Flick wheel to light';
-}
-// Swipe & tap on lighter - FINAL FIXED VERSION
-let touchStartY = null;
-let touchStartX = null;
+  function playSpark() {
+    try {
+      const ctx = getAudioCtx();
+      const dur = 0.12;
+      const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) {
+        const t = i / ctx.sampleRate;
+        d[i] = (Math.random() * 2 - 1) * Math.exp(-t * 30) + Math.sin(2*Math.PI*3000*t) * Math.exp(-t * 50) * 0.3;
+      }
+      const src = ctx.createBufferSource();
+      const gain = ctx.createGain(); gain.gain.value = 0.5;
+      src.buffer = buf; src.connect(gain); gain.connect(ctx.destination);
+      src.start();
+    } catch(e) {}
+  }
 
-lighterContainer.addEventListener('touchstart', e => {
-  if (e.touches.length !== 1) return;
-  touchStartY = e.touches[0].clientY;
-  touchStartX = e.touches[0].clientX;
-  e.preventDefault();
-}, { passive: false });
+  function playFlame() {
+    try {
+      const ctx = getAudioCtx();
+      const dur = 1.5;
+      const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) {
+        d[i] = (Math.random() * 2 - 1) * 0.3;
+      }
+      const src = ctx.createBufferSource();
+      const bpf = ctx.createBiquadFilter();
+      bpf.type = 'bandpass'; bpf.frequency.value = 400; bpf.Q.value = 0.8;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.1);
+      gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + dur);
+      src.buffer = buf;
+      src.connect(bpf); bpf.connect(gain); gain.connect(ctx.destination);
+      src.start();
+      setTimeout(() => { try { src.stop(); } catch(e){} }, dur * 1000);
+    } catch(e) {}
+  }
 
-lighterContainer.addEventListener('touchmove', e => {
-  if (touchStartY === null) return;
-  e.preventDefault();
-}, { passive: false });
+  function playPuff() {
+    try {
+      const ctx = getAudioCtx();
+      const dur = 0.4;
+      const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) {
+        const t = i / ctx.sampleRate;
+        d[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * t / dur) * 0.4;
+      }
+      const src = ctx.createBufferSource();
+      const lpf = ctx.createBiquadFilter(); lpf.type = 'lowpass'; lpf.frequency.value = 800;
+      const gain = ctx.createGain(); gain.gain.value = 0.4;
+      src.buffer = buf; src.connect(lpf); lpf.connect(gain); gain.connect(ctx.destination);
+      src.start();
+    } catch(e) {}
+  }
 
-lighterContainer.addEventListener('touchend', e => {
-  if (touchStartY === null) return;
+  // ========================
+  // CANVAS & PARTICLES
+  // ========================
+  const canvas = document.getElementById('flame-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let smokeParticles = [];
+  let flameAlpha = 0;
 
-  const dy = touchStartY - e.changedTouches[0].clientY;
-  const dx = Math.abs(touchStartX - e.changedTouches[0].clientX);
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
 
-  // Swipe up: open or ignite
-  if (dy > 20 && dx < 50) {
-    if (!state.isOpen) {
-      openLid();
-    } else if (!state.isLit) {
-      ignite();
+  function getFlameOrigin() {
+    const lc = document.getElementById('lighter-container');
+    if (!lc) return { x: window.innerWidth/2, y: window.innerHeight/2 };
+    const rect = lc.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width * 0.5,
+      y: rect.top + rect.height * (88/280)
+    };
+  }
+
+  function getCigTipPos() {
+    const wrap = document.getElementById('cigarette-wrap');
+    if (!wrap || !state.isLit) return null;
+    const rect = document.getElementById('cig-svg').getBoundingClientRect();
+    return {
+      x: rect.left + rect.width * (13/180),
+      y: rect.top + rect.height * 0.5
+    };
+  }
+
+  const FLAME_COLORS = {
+    orange: { base: ['#ff6a00','#ff9800','#ffcc00','#ff3300'], blue: '#4455ff', core: '#fff9e6' },
+    blue: { base: ['#2244ff','#4488ff','#88ccff','#0022dd'], blue: '#001199', core: '#eeffff' },
+    green: { base: ['#00aa22','#44ff44','#aaff00','#006600'], blue: '#004400', core: '#eeffcc' },
+    purple: { base: ['#8800ff','#cc44ff','#ff88ff','#550099'], blue: '#330055', core: '#fff0ff' },
+    red: { base: ['#cc0000','#ff2200','#ff6600','#880000'], blue: '#440000', core: '#fff5f5' },
+  };
+
+  class FlameParticle {
+    constructor(ox, oy) {
+      this.reset(ox, oy);
+    }
+    reset(ox, oy) {
+      this.x = ox + (Math.random() - 0.5) * 16;
+      this.y = oy;
+      const intensity = 1 + state.micVolume * 2;
+      this.vx = (Math.random() - 0.5) * 1.2 + state.tiltX * 0.8;
+      this.vy = -(2.5 + Math.random() * 2.5) * intensity;
+      this.life = 1.0;
+      this.maxLife = 0.6 + Math.random() * 0.5;
+      this.decay = 1.0 / (this.maxLife * 60);
+      this.size = 8 + Math.random() * 18;
+      const colors = FLAME_COLORS[state.flameColor];
+      this.color = colors.base[Math.floor(Math.random() * colors.base.length)];
+      this.isBlue = Math.random() < 0.25;
+      if (this.isBlue) { this.color = colors.blue; this.size *= 0.6; }
     }
   }
-  // Swipe down: close
-  else if (dy < -20 && dx < 50) {
-    if (state.isOpen) {
-      closeLid();
+
+  class SmokeParticle {
+    constructor(ox, oy) {
+      this.x = ox + (Math.random() - 0.5) * 10;
+      this.y = oy;
+      const speed = state.isPuffing ? (1 + state.micVolume * 3) : 0.5;
+      this.vx = (Math.random() - 0.5) * 0.8 + state.tiltX * 0.3;
+      this.vy = -(0.6 + Math.random() * 1.0) * speed;
+      this.life = 1.0;
+      this.decay = 0.005 + Math.random() * 0.006;
+      this.size = 6 + Math.random() * 14;
+      this.growRate = 0.15 + Math.random() * 0.2;
+      this.alpha = 0.0;
+      this.fadeIn = true;
     }
   }
-  // Tap: toggle lid
-  else if (Math.abs(dy) < 15 && dx < 30) {
-    if (!state.isOpen) {
-      openLid();
-    } else {
-      closeLid();
+
+  // ========================
+  // LIGHTER LID + WHEEL
+  // ========================
+  const lidGroup = document.getElementById('lid-group');
+  const wheelSpin = document.getElementById('wheel-spin');
+  const lighterContainer = document.getElementById('lighter-container');
+  const cigaretteWrap = document.getElementById('cigarette-wrap');
+  const hint = document.getElementById('hint');
+  let wheelAngle = 0;
+
+  function openLid() {
+    if (state.isOpen) return;
+    state.isOpen = true;
+    lidGroup.classList.add('open');
+    playClick();
+    hint.textContent = 'Drag wheel to spark · Tap to close';
+    setTimeout(() => {
+      if (!state.isLit) hint.textContent = 'Flick wheel to ignite 🔥';
+    }, 800);
+  }
+
+  function closeLid() {
+    if (!state.isOpen) return;
+    state.isOpen = false;
+    lidGroup.classList.remove('open');
+    if (state.isLit) extinguish();
+    playClick();
+    hint.textContent = 'Swipe up to open · Flick wheel to light';
+  }
+
+  function ignite() {
+    if (state.isLit || !state.isOpen) return;
+    state.isLit = true;
+    flameAlpha = 0;
+    lighterContainer.classList.add('glowing');
+    playFlame();
+    state.litTotal++;
+    state.litToday++;
+    state.litStreak = Math.max(state.litStreak + 1, state.litStreak);
+    saveStats();
+    updateCounterUI();
+    cigaretteWrap.classList.add('visible');
+    hint.textContent = 'Tilt to sway · Blow to intensify 🌬️';
+    state.interstitialCounter++;
+    if (state.interstitialCounter % 5 === 0) setTimeout(showInterstitial, 2000);
+    if (!state.micAsked) {
+      state.micAsked = true;
+      setTimeout(() => document.getElementById('mic-prompt').classList.add('open'), 1800);
     }
   }
 
-  touchStartY = null;
-  touchStartX = null;
-}, { passive: false });
-
-// Click fallback for extra reliability
-lighterContainer.addEventListener('click', e => {
-  e.preventDefault();
-  if (!state.isOpen) {
-    openLid();
-  } else {
-    closeLid();
+  function extinguish() {
+    if (!state.isLit) return;
+    state.isLit = false;
+    flameAlpha = 0;
+    lighterContainer.classList.remove('glowing');
+    particles = [];
+    cigaretteWrap.classList.remove('visible');
+    hint.textContent = state.isOpen ? 'Flick wheel to ignite 🔥' : 'Swipe up to open · Flick wheel to light';
   }
-});
 
-  wheelGroup.addEventListener('click', e => {
-  e.stopPropagation();
-  if (!state.isOpen) { openLid(); return; }
-  playSpark();
-  showSparkFx();
-  wheelAngle += 45;
-  wheelSpin.setAttribute('transform', `translate(11,11) rotate(${wheelAngle})`);
-  setTimeout(() => { if (!state.isLit) ignite(); }, 200);
-});
+  // FINAL FIXED TOUCH & SWIPE - ΔΙΟΡΘΩΜΕΝΟ
+  let touchStartY = null;
+  let touchStartX = null;
 
-function showSparkFx() {
-  const sp = document.createElement('div');
-  sp.className = 'spark-fx'; sp.textContent = '✦';
-  lighterContainer.appendChild(sp);
-  setTimeout(() => sp.remove(), 400);
-}
+  lighterContainer.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) return;
+    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+    e.preventDefault();
+  }, { passive: false });
 
-// ========================
-// SWIPE UP ON LIGHTER BODY
-// ========================
-let touchStartY = null, touchStartX = null;
-lighterContainer.addEventListener('touchstart', e => {
-  touchStartY = e.touches[0].clientY;
-  touchStartX = e.touches[0].clientX;
-}, { passive: true });
+  lighterContainer.addEventListener('touchmove', e => {
+    if (touchStartY === null) return;
+    e.preventDefault();
+  }, { passive: false });
 
-lighterContainer.addEventListener('touchend', e => {
-  if (touchStartY === null) return;
-  const dy = touchStartY - e.changedTouches[0].clientY;
-  const dx = Math.abs(touchStartX - e.changedTouches[0].clientX);
-  if (dy > 30 && dx < 40) {
-    // Swipe up
-    if (!state.isOpen) openLid();
-    else if (state.isOpen && !state.isLit) ignite();
-  } else if (dy < -30 && dx < 40) {
-    // Swipe down
-    if (state.isOpen) closeLid();
-  } else if (Math.abs(dy) < 10 && dx < 20) {
-    // Tap
+  lighterContainer.addEventListener('touchend', e => {
+    if (touchStartY === null) return;
+
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    const dx = Math.abs(touchStartX - e.changedTouches[0].clientX);
+
+    // Swipe up (πιο εύκολο - 15 pixels threshold)
+    if (dy > 15 && dx < 50) {
+      if (!state.isOpen) openLid();
+      else if (!state.isLit) ignite();
+    }
+    // Swipe down (πιο εύκολο κλείσιμο)
+    else if (dy < -15 && dx < 50) {
+      if (state.isOpen) closeLid();
+    }
+    // Tap (μικρή κίνηση → toggle)
+    else if (Math.abs(dy) < 12 && dx < 30) {
+      if (!state.isOpen) openLid();
+      else closeLid();
+    }
+
+    touchStartY = null;
+    touchStartX = null;
+  }, { passive: false });
+
+  // Click fallback
+  lighterContainer.addEventListener('click', e => {
+    e.preventDefault();
     if (!state.isOpen) openLid();
     else closeLid();
+  });
+
+  // Wheel click (δεν το πειράξαμε)
+  wheelGroup.addEventListener('click', e => {
+    e.stopPropagation();
+    if (!state.isOpen) { openLid(); return; }
+    playSpark();
+    showSparkFx();
+    wheelAngle += 45;
+    wheelSpin.setAttribute('transform', `translate(11,11) rotate(${wheelAngle})`);
+    setTimeout(() => { if (!state.isLit) ignite(); }, 200);
+  });
+
+  function showSparkFx() {
+    const sp = document.createElement('div');
+    sp.className = 'spark-fx'; sp.textContent = '✦';
+    lighterContainer.appendChild(sp);
+    setTimeout(() => sp.remove(), 400);
   }
-  touchStartY = null;
-}, { passive: true });
 
-lighterContainer.addEventListener('click', () => {
-  if (!state.isOpen) openLid(); else closeLid();
-});
-
-// ========================
-// CIGARETTE PUFFING
-// ========================
-const cigSvgWrap = document.getElementById('cig-svg-wrap');
-let puffInterval = null;
-let puffTimeout = null;
-
-function startPuff() {
-  if (!state.isLit) return;
-  state.isPuffing = true;
-  playPuff();
-  puffTimeout = setTimeout(stopPuff, 3000);
-}
-function stopPuff() {
-  state.isPuffing = false;
-  clearTimeout(puffTimeout);
-  state.puffCount++;
-  saveStats();
-  updateCounterUI();
-}
-
-cigSvgWrap.addEventListener('touchstart', e => { e.preventDefault(); startPuff(); }, { passive: false });
-cigSvgWrap.addEventListener('touchend', () => stopPuff());
-cigSvgWrap.addEventListener('mousedown', () => startPuff());
-document.addEventListener('mouseup', () => { if (state.isPuffing) stopPuff(); });
-
-// ========================
-// DEVICE MOTION / ORIENTATION
-// ========================
-let shakeThreshold = 18;
-let lastShakeTime = 0;
-let lastAccel = { x: 0, y: 0, z: 0 };
-
-function handleMotion(e) {
-  const acc = e.accelerationIncludingGravity || e.acceleration;
-  if (!acc) return;
-  const dx = Math.abs(acc.x - lastAccel.x);
-  const dy = Math.abs(acc.y - lastAccel.y);
-  const dz = Math.abs(acc.z - lastAccel.z);
-  lastAccel = { x: acc.x, y: acc.y, z: acc.z };
-  const delta = Math.sqrt(dx*dx + dy*dy + dz*dz);
-  const now = Date.now();
-  if (delta > shakeThreshold && now - lastShakeTime > 800) {
-    lastShakeTime = now;
-    if (!state.isOpen) {
-      openLid();
-    } else if (!state.isLit) {
-      playSpark(); showSparkFx();
-      setTimeout(ignite, 200);
-    }
+  // ========================
+  // CIGARETTE PUFF
+  // ========================
+  const cigSvgWrap = document.getElementById('cig-svg-wrap');
+  function startPuff() {
+    if (!state.isLit) return;
+    state.isPuffing = true;
+    playPuff();
   }
-}
 
-function handleOrientation(e) {
-  // gamma = left/right tilt (-90 to 90), beta = front/back (-180 to 180)
-  const gamma = e.gamma || 0; // left/right
-  const beta = (e.beta || 0) - 45; // adjust for typical holding angle
-  state.tiltX = gamma / 90; // normalized -1 to 1
-  state.tiltY = beta / 90;
-}
+  function stopPuff() {
+    state.isPuffing = false;
+    state.puffCount++;
+    saveStats();
+    updateCounterUI();
+  }
 
-// Request motion/orientation permissions
-function requestMotionPermission() {
-  if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-    DeviceMotionEvent.requestPermission().then(perm => {
-      if (perm === 'granted') {
-        window.addEventListener('devicemotion', handleMotion);
-        window.addEventListener('deviceorientation', handleOrientation);
+  cigSvgWrap.addEventListener('touchstart', e => { e.preventDefault(); startPuff(); }, { passive: false });
+  cigSvgWrap.addEventListener('touchend', stopPuff);
+  cigSvgWrap.addEventListener('mousedown', startPuff);
+  document.addEventListener('mouseup', stopPuff);
+
+  // ========================
+  // DEVICE MOTION & ORIENTATION
+  // ========================
+  let shakeThreshold = 18;
+  let lastShakeTime = 0;
+  let lastAccel = { x: 0, y: 0, z: 0 };
+
+  function handleMotion(e) {
+    const acc = e.accelerationIncludingGravity || e.acceleration;
+    if (!acc) return;
+    const delta = Math.sqrt(
+      Math.pow(acc.x - lastAccel.x, 2) +
+      Math.pow(acc.y - lastAccel.y, 2) +
+      Math.pow(acc.z - lastAccel.z, 2)
+    );
+    const now = Date.now();
+    if (delta > shakeThreshold && now - lastShakeTime > 800) {
+      lastShakeTime = now;
+      if (!state.isOpen) openLid();
+      else if (!state.isLit) {
+        playSpark(); showSparkFx();
+        setTimeout(ignite, 200);
       }
-    }).catch(()=>{});
-  } else {
-    // Android or browser that doesn't need permission
-    window.addEventListener('devicemotion', handleMotion);
-    window.addEventListener('deviceorientation', handleOrientation);
-  }
-}
-requestMotionPermission();
-
-// ========================
-// MICROPHONE / BLOW DETECTION
-// ========================
-let micStream = null, micAnalyser = null, micData = null;
-let micRaf = null;
-
-function startMic() {
-  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-    .then(stream => {
-      micStream = stream;
-      const actx = getAudioCtx();
-      const src = actx.createMediaStreamSource(stream);
-      micAnalyser = actx.createAnalyser();
-      micAnalyser.fftSize = 256;
-      micData = new Uint8Array(micAnalyser.frequencyBinCount);
-      src.connect(micAnalyser);
-      state.micEnabled = true;
-      showToast('🎤 Blow detection ON! Blow to intensify flame 🔥');
-      document.getElementById('mic-toggle-btn').textContent = '🎤 Blow Detection: ON';
-      function readMic() {
-        micAnalyser.getByteFrequencyData(micData);
-        // Average volume of lower frequencies (blow = broadband low-freq)
-        let sum = 0;
-        for (let i = 0; i < 20; i++) sum += micData[i];
-        const avg = sum / 20;
-        state.micVolume = Math.min(avg / 128, 1.0);
-        micRaf = requestAnimationFrame(readMic);
-      }
-      readMic();
-    })
-    .catch(() => {
-      showToast('Microphone access denied');
-    });
-}
-
-function stopMic() {
-  if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
-  if (micRaf) { cancelAnimationFrame(micRaf); micRaf = null; }
-  state.micEnabled = false; state.micVolume = 0;
-  document.getElementById('mic-toggle-btn').textContent = '🎤 Blow Detection: OFF';
-}
-
-document.getElementById('mic-allow').addEventListener('click', () => {
-  document.getElementById('mic-prompt').classList.remove('open');
-  startMic();
-});
-document.getElementById('mic-deny').addEventListener('click', () => {
-  document.getElementById('mic-prompt').classList.remove('open');
-});
-document.getElementById('mic-toggle-btn').addEventListener('click', () => {
-  if (state.micEnabled) stopMic();
-  else {
-    document.getElementById('settings-panel').classList.remove('open');
-    setTimeout(() => document.getElementById('mic-prompt').classList.add('open'), 200);
-  }
-});
-
-// ========================
-// CONCERT / PARTY MODE
-// ========================
-const concertOverlay = document.getElementById('concert-overlay');
-const concertBtn = document.getElementById('concert-btn');
-let concertRaf = null;
-let concertPhase = 0;
-
-function startConcert() {
-  state.concertMode = true;
-  concertBtn.classList.add('active');
-  concertOverlay.classList.add('active');
-  state.concertCount++;
-  saveStats();
-  showToast('🎵 Concert Mode! Raise your lighter!');
-  if (!state.isOpen) openLid();
-  setTimeout(() => { if (!state.isLit) ignite(); }, 500);
-  function pulseLoop() {
-    concertPhase += 0.04;
-    const r = Math.floor(120 + Math.sin(concertPhase * 1.3) * 60);
-    const g = Math.floor(40 + Math.sin(concertPhase * 0.7 + 2) * 30);
-    const b = Math.floor(80 + Math.sin(concertPhase * 1.7 + 4) * 50);
-    const alpha = 0.12 + Math.abs(Math.sin(concertPhase)) * 0.1;
-    concertOverlay.style.background = `rgba(${r},${g},${b},${alpha})`;
-    document.documentElement.style.setProperty('--glow', `rgba(${r},${g},${b},0.7)`);
-    concertRaf = requestAnimationFrame(pulseLoop);
-  }
-  concertLoop = pulseLoop;
-  pulseLoop();
-}
-let concertLoop = null;
-
-function stopConcert() {
-  state.concertMode = false;
-  concertBtn.classList.remove('active');
-  concertOverlay.classList.remove('active');
-  concertOverlay.style.background = 'transparent';
-  document.documentElement.style.setProperty('--glow', 'rgba(255, 150, 30, 0.6)');
-  if (concertRaf) { cancelAnimationFrame(concertRaf); concertRaf = null; }
-}
-
-concertBtn.addEventListener('click', () => {
-  if (state.concertMode) stopConcert(); else startConcert();
-});
-
-// ========================
-// FLAME COLOR PICKER
-// ========================
-const lockedColors = ['green', 'purple', 'red'];
-document.querySelectorAll('.color-dot').forEach(dot => {
-  dot.addEventListener('click', () => {
-    const color = dot.dataset.color;
-    if (lockedColors.includes(color)) {
-      alert(`${color.charAt(0).toUpperCase()+color.slice(1)} flame – Premium! Coming soon for $0.99 🔥`);
-      return;
     }
-    document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-    dot.classList.add('active');
-    state.flameColor = color;
-    showToast(`Flame color: ${color} 🔥`);
-  });
-});
-
-// ========================
-// SKIN SELECTOR
-// ========================
-document.querySelectorAll('.skin-thumb').forEach(thumb => {
-  thumb.addEventListener('click', () => {
-    const skin = thumb.dataset.skin;
-    if (thumb.querySelector('.lock-overlay')) {
-      alert(`${skin} skin – Premium! Visit Settings to unlock 🔒`);
-      return;
-    }
-    document.querySelectorAll('.skin-thumb').forEach(t => t.classList.remove('active'));
-    thumb.classList.add('active');
-    state.skin = skin;
-    showToast('Skin applied!');
-  });
-});
-
-// ========================
-// PANELS
-// ========================
-document.getElementById('stats-btn').addEventListener('click', () => {
-  updateCounterUI();
-  document.getElementById('stats-panel').classList.add('open');
-});
-document.getElementById('close-stats').addEventListener('click', () => {
-  document.getElementById('stats-panel').classList.remove('open');
-});
-document.getElementById('settings-btn').addEventListener('click', () => {
-  document.getElementById('settings-panel').classList.add('open');
-});
-document.getElementById('close-settings').addEventListener('click', () => {
-  document.getElementById('settings-panel').classList.remove('open');
-});
-document.getElementById('reset-stats-btn').addEventListener('click', () => {
-  if (confirm('Reset all stats?')) {
-    state.litTotal = state.litToday = state.puffCount = state.concertCount = state.litStreak = 0;
-    saveStats(); updateCounterUI();
-    showToast('Stats reset!');
+    lastAccel = { x: acc.x || 0, y: acc.y || 0, z: acc.z || 0 };
   }
-});
 
-// Close panels on backdrop click
-['stats-panel','settings-panel'].forEach(id => {
-  document.getElementById(id).addEventListener('click', e => {
-    if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
-  });
-});
+  function handleOrientation(e) {
+    state.tiltX = (e.gamma || 0) / 90;
+    state.tiltY = ((e.beta || 0) - 45) / 90;
+  }
 
-// ========================
-// INTERSTITIAL AD
-// ========================
-function showInterstitial() {
-  document.getElementById('interstitial').classList.add('open');
-}
-document.getElementById('skip-ad-btn').addEventListener('click', () => {
-  document.getElementById('interstitial').classList.remove('open');
-});
-
-// ========================
-// SHARE / SCREENSHOT
-// ========================
-document.getElementById('share-btn').addEventListener('click', () => {
-  if (navigator.share) {
-    navigator.share({
-      title: 'FlickIt – Virtual Lighter',
-      text: `🔥 I've lit ${state.litTotal} virtual lighters with FlickIt! Streak: ${state.litStreak} 🔥`,
-      url: window.location.href
-    }).catch(()=>{});
-  } else {
-    // Fallback: copy to clipboard
-    const text = `🔥 Check out FlickIt – the most realistic virtual lighter! I've lit ${state.litTotal} fires!\n${window.location.href}`;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard! Share it! 📋'));
+  function requestMotionPermission() {
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission().then(perm => {
+        if (perm === 'granted') {
+          window.addEventListener('devicemotion', handleMotion);
+          window.addEventListener('deviceorientation', handleOrientation);
+        }
+      }).catch(() => {});
     } else {
-      showToast('Share: flickit.app 📲');
+      window.addEventListener('devicemotion', handleMotion);
+      window.addEventListener('deviceorientation', handleOrientation);
     }
   }
-});
+  requestMotionPermission();
 
-// ========================
-// INSTALL PWA PROMPT
-// ========================
-let deferredPrompt = null;
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById('install-banner').classList.add('show');
-});
-document.getElementById('install-yes').addEventListener('click', () => {
-  if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; }
-  document.getElementById('install-banner').classList.remove('show');
-});
-document.getElementById('install-no').addEventListener('click', () => {
-  document.getElementById('install-banner').classList.remove('show');
-});
+  // ========================
+  // MICROPHONE BLOW - ΔΙΟΡΘΩΜΕΝΟ (ΠΙΟ ΕΥΑΙΣΘΗΤΟ)
+  // ========================
+  let micStream = null, micAnalyser = null, micData = null;
+  let micRaf = null;
 
-// ========================
-// TOAST
-// ========================
-let toastTimer = null;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
-}
+  function startMic() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        micStream = stream;
+        const actx = getAudioCtx();
+        const src = actx.createMediaStreamSource(stream);
+        micAnalyser = actx.createAnalyser();
+        micAnalyser.fftSize = 256;
+        micData = new Uint8Array(micAnalyser.frequencyBinCount);
+        src.connect(micAnalyser);
+        state.micEnabled = true;
+        showToast('🎤 Blow detection ON! Blow hard to test 🔥');
+        document.getElementById('mic-toggle-btn').textContent = '🎤 Blow Detection: ON';
 
-// ========================
-// MAIN ANIMATION LOOP
-// ========================
-const PARTICLE_COUNT = 60;
-const SMOKE_COUNT = 30;
-
-function spawnFlameParticle(ox, oy) {
-  if (particles.length < PARTICLE_COUNT) {
-    particles.push(new FlameParticle(ox, oy));
-  } else {
-    // Reuse oldest
-    const p = particles.shift();
-    p.reset(ox, oy);
-    particles.push(p);
-  }
-}
-
-function spawnSmokeParticle(ox, oy) {
-  if (smokeParticles.length < SMOKE_COUNT) {
-    smokeParticles.push(new SmokeParticle(ox, oy));
-  }
-}
-
-function renderFrame() {
-  requestAnimationFrame(renderFrame);
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  if (!state.isLit && particles.length === 0 && smokeParticles.length === 0) return;
-
-  const origin = getFlameOrigin();
-
-  // Fade flame alpha
-  if (state.isLit) {
-    flameAlpha = Math.min(flameAlpha + 0.05, 1);
-  } else {
-    flameAlpha = Math.max(flameAlpha - 0.08, 0);
+        function readMic() {
+          micAnalyser.getByteFrequencyData(micData);
+          let sum = 0;
+          for (let i = 0; i < 60; i++) sum += micData[i]; // περισσότερα bins
+          const avg = sum / 60;
+          state.micVolume = Math.min(avg / 70, 1.0); // πιο ευαίσθητο (από 128 → 70)
+          micRaf = requestAnimationFrame(readMic);
+        }
+        readMic();
+      })
+      .catch(() => showToast('Microphone denied'));
   }
 
-  // Spawn flame particles
-  if (state.isLit && flameAlpha > 0.3) {
-    const rate = 3 + Math.floor(state.micVolume * 5);
-    for (let i = 0; i < rate; i++) spawnFlameParticle(origin.x, origin.y);
+  function stopMic() {
+    if (micStream) micStream.getTracks().forEach(t => t.stop());
+    if (micRaf) cancelAnimationFrame(micRaf);
+    state.micEnabled = false;
+    state.micVolume = 0;
+    document.getElementById('mic-toggle-btn').textContent = '🎤 Blow Detection: OFF';
   }
 
-  // Draw flame particles
-  for (let i = particles.length - 1; i >= 0; i--) {
-    const p = particles[i];
-    p.life -= p.decay;
-    if (p.life <= 0) { particles.splice(i, 1); continue; }
+  document.getElementById('mic-allow').addEventListener('click', () => {
+    document.getElementById('mic-prompt').classList.remove('open');
+    startMic();
+  });
 
-    // Wind / tilt effect
-    p.vx += state.tiltX * 0.15;
-    p.vy *= 0.97;
-    p.x += p.vx;
-    p.y += p.vy;
-    p.size *= 0.97;
+  document.getElementById('mic-deny').addEventListener('click', () => {
+    document.getElementById('mic-prompt').classList.remove('open');
+  });
 
-    const alpha = p.life * flameAlpha;
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
-    grad.addColorStop(0, p.isBlue ? FLAME_COLORS[state.flameColor].core : p.color);
-    grad.addColorStop(0.4, p.color);
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+  document.getElementById('mic-toggle-btn').addEventListener('click', () => {
+    if (state.micEnabled) stopMic();
+    else {
+      document.getElementById('settings-panel').classList.remove('open');
+      setTimeout(() => document.getElementById('mic-prompt').classList.add('open'), 200);
+    }
+  });
+
+  // ========================
+  // CONCERT MODE
+  // ========================
+  const concertOverlay = document.getElementById('concert-overlay');
+  const concertBtn = document.getElementById('concert-btn');
+  let concertRaf = null;
+  let concertPhase = 0;
+
+  function startConcert() {
+    state.concertMode = true;
+    concertBtn.classList.add('active');
+    concertOverlay.classList.add('active');
+    state.concertCount++;
+    saveStats();
+    showToast('🎵 Concert Mode ON!');
+    if (!state.isOpen) openLid();
+    setTimeout(() => { if (!state.isLit) ignite(); }, 500);
+
+    function pulseLoop() {
+      concertPhase += 0.04;
+      const r = Math.floor(120 + Math.sin(concertPhase * 1.3) * 60);
+      const g = Math.floor(40 + Math.sin(concertPhase * 0.7 + 2) * 30);
+      const b = Math.floor(80 + Math.sin(concertPhase * 1.7 + 4) * 50);
+      const alpha = 0.12 + Math.abs(Math.sin(concertPhase)) * 0.1;
+      concertOverlay.style.background = `rgba(${r},${g},${b},${alpha})`;
+      document.documentElement.style.setProperty('--glow', `rgba(${r},${g},${b},0.7)`);
+      concertRaf = requestAnimationFrame(pulseLoop);
+    }
+    pulseLoop();
   }
 
-  // Glow at flame base
-  if (flameAlpha > 0) {
-    const glowCol = FLAME_COLORS[state.flameColor].base[0];
-    ctx.save();
-    ctx.globalAlpha = flameAlpha * 0.4;
-    const ggrad = ctx.createRadialGradient(origin.x, origin.y, 0, origin.x, origin.y, 50);
-    ggrad.addColorStop(0, glowCol);
-    ggrad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = ggrad;
-    ctx.beginPath();
-    ctx.arc(origin.x, origin.y, 50, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+  function stopConcert() {
+    state.concertMode = false;
+    concertBtn.classList.remove('active');
+    concertOverlay.classList.remove('active');
+    concertOverlay.style.background = 'transparent';
+    document.documentElement.style.setProperty('--glow', 'rgba(255, 150, 30, 0.6)');
+    if (concertRaf) cancelAnimationFrame(concertRaf);
   }
 
-  // Spawn smoke from cigarette when puffing
-  const cigPos = getCigTipPos();
-  if (cigPos && (state.isPuffing || state.micVolume > 0.3)) {
-    for (let i = 0; i < 2; i++) spawnSmokeParticle(cigPos.x, cigPos.y);
+  concertBtn.addEventListener('click', () => {
+    if (state.concertMode) stopConcert();
+    else startConcert();
+  });
+
+  // ========================
+  // FLAME COLOR & SKIN
+  // ========================
+  const lockedColors = ['green', 'purple', 'red'];
+  document.querySelectorAll('.color-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      const color = dot.dataset.color;
+      if (lockedColors.includes(color)) {
+        alert(`${color.charAt(0).toUpperCase() + color.slice(1)} flame – Premium!`);
+        return;
+      }
+      document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+      state.flameColor = color;
+      showToast(`Flame: ${color} 🔥`);
+    });
+  });
+
+  document.querySelectorAll('.skin-thumb').forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      const skin = thumb.dataset.skin;
+      if (thumb.querySelector('.lock-overlay')) {
+        alert(`${skin} skin – Premium!`);
+        return;
+      }
+      document.querySelectorAll('.skin-thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      state.skin = skin;
+      showToast('Skin changed!');
+    });
+  });
+
+  // ========================
+  // PANELS & BUTTONS
+  // ========================
+  document.getElementById('stats-btn').addEventListener('click', () => {
+    updateCounterUI();
+    document.getElementById('stats-panel').classList.add('open');
+  });
+
+  document.getElementById('close-stats').addEventListener('click', () => document.getElementById('stats-panel').classList.remove('open'));
+
+  document.getElementById('settings-btn').addEventListener('click', () => document.getElementById('settings-panel').classList.add('open'));
+
+  document.getElementById('close-settings').addEventListener('click', () => document.getElementById('settings-panel').classList.remove('open'));
+
+  document.getElementById('reset-stats-btn').addEventListener('click', () => {
+    if (confirm('Reset stats?')) {
+      state.litTotal = state.litToday = state.puffCount = state.concertCount = state.litStreak = 0;
+      saveStats(); updateCounterUI();
+      showToast('Stats reset!');
+    }
+  });
+
+  ['stats-panel','settings-panel'].forEach(id => {
+    document.getElementById(id).addEventListener('click', e => {
+      if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+    });
+  });
+
+  // ========================
+  // INTERSTITIAL & SHARE
+  // ========================
+  function showInterstitial() {
+    document.getElementById('interstitial').classList.add('open');
   }
-  // Also some passive smoke when lit
-  if (cigPos && state.isLit && Math.random() < 0.3) {
-    spawnSmokeParticle(cigPos.x, cigPos.y - 5);
+
+  document.getElementById('skip-ad-btn').addEventListener('click', () => document.getElementById('interstitial').classList.remove('open'));
+
+  document.getElementById('share-btn').addEventListener('click', () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'FlickIt – Virtual Lighter',
+        text: `🔥 Lit ${state.litTotal} times! Streak: ${state.litStreak}`,
+        url: window.location.href
+      }).catch(()=>{});
+    } else {
+      showToast('Share link: ' + window.location.href);
+    }
+  });
+
+  // ========================
+  // INSTALL PROMPT
+  // ========================
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('install-banner').classList.add('show');
+  });
+
+  document.getElementById('install-yes').addEventListener('click', () => {
+    if (deferredPrompt) deferredPrompt.prompt();
+    document.getElementById('install-banner').classList.remove('show');
+  });
+
+  document.getElementById('install-no').addEventListener('click', () => document.getElementById('install-banner').classList.remove('show'));
+
+  // ========================
+  // TOAST
+  // ========================
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
   }
 
-  // Draw smoke particles
-  for (let i = smokeParticles.length - 1; i >= 0; i--) {
-    const s = smokeParticles[i];
-    s.life -= s.decay;
-    if (s.life <= 0) { smokeParticles.splice(i, 1); continue; }
+  // ========================
+  // MAIN RENDER LOOP
+  // ========================
+  const PARTICLE_COUNT = 60;
+  const SMOKE_COUNT = 30;
 
-    s.vx += (Math.random() - 0.5) * 0.05 + state.tiltX * 0.05;
-    s.vy *= 0.99;
-    s.x += s.vx;
-    s.y += s.vy;
-    s.size += s.growRate;
-
-    if (s.fadeIn && s.alpha < 0.25) s.alpha += 0.02;
-    else { s.fadeIn = false; s.alpha = Math.min(s.alpha, s.life * 0.35); }
-
-    ctx.save();
-    ctx.globalAlpha = s.alpha;
-    const sgrad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size);
-    sgrad.addColorStop(0, 'rgba(200,200,200,0.6)');
-    sgrad.addColorStop(0.5, 'rgba(150,150,150,0.3)');
-    sgrad.addColorStop(1, 'rgba(100,100,100,0)');
-    ctx.fillStyle = sgrad;
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
+  function spawnFlameParticle(ox, oy) {
+    if (particles.length < PARTICLE_COUNT) {
+      particles.push(new FlameParticle(ox, oy));
+    } else {
+      const p = particles.shift();
+      p.reset(ox, oy);
+      particles.push(p);
+    }
   }
-}
 
-renderFrame();
+  function spawnSmokeParticle(ox, oy) {
+    if (smokeParticles.length < SMOKE_COUNT) {
+      smokeParticles.push(new SmokeParticle(ox, oy));
+    }
+  }
 
-// ========================
-// PREVENT SCROLL / BOUNCE
-// ========================
-document.addEventListener('touchmove', e => { e.preventDefault(); }, { passive: false });
+  function renderFrame() {
+    requestAnimationFrame(renderFrame);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (!state.isLit && particles.length === 0 && smokeParticles.length === 0) return;
 
-// ========================
-// KEYBOARD SHORTCUT (desktop)
-// ========================
-document.addEventListener('keydown', e => {
-  if (e.code === 'Space') { e.preventDefault(); if (!state.isOpen) openLid(); else if (!state.isLit) ignite(); else closeLid(); }
-  if (e.code === 'Escape') closeLid();
-  if (e.code === 'KeyC') { if (state.concertMode) stopConcert(); else startConcert(); }
-});
+    const origin = getFlameOrigin();
 
-// ========================
-// INIT HINT
-// ========================
-hint.textContent = 'Tap or swipe up to open · Shake to ignite 🔥';
-showToast('Welcome to FlickIt! 🔥 Tap the lighter to begin');
+    if (state.isLit) flameAlpha = Math.min(flameAlpha + 0.05, 1);
+    else flameAlpha = Math.max(flameAlpha - 0.08, 0);
 
-})(); // end IIFE
+    if (state.isLit && flameAlpha > 0.3) {
+      const rate = 3 + Math.floor(state.micVolume * 5);
+      for (let i = 0; i < rate; i++) spawnFlameParticle(origin.x, origin.y);
+    }
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.life -= p.decay;
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
+      p.vx += state.tiltX * 0.15;
+      p.vy *= 0.97;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.size *= 0.97;
+      const alpha = p.life * flameAlpha;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+      grad.addColorStop(0, p.isBlue ? FLAME_COLORS[state.flameColor].core : p.color);
+      grad.addColorStop(0.4, p.color);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    if (flameAlpha > 0) {
+      const glowCol = FLAME_COLORS[state.flameColor].base[0];
+      ctx.save();
+      ctx.globalAlpha = flameAlpha * 0.4;
+      const ggrad = ctx.createRadialGradient(origin.x, origin.y, 0, origin.x, origin.y, 50);
+      ggrad.addColorStop(0, glowCol);
+      ggrad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = ggrad;
+      ctx.beginPath();
+      ctx.arc(origin.x, origin.y, 50, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    const cigPos = getCigTipPos();
+    if (cigPos && (state.isPuffing || state.micVolume > 0.3)) {
+      for (let i = 0; i < 2; i++) spawnSmokeParticle(cigPos.x, cigPos.y);
+    }
+    if (cigPos && state.isLit && Math.random() < 0.3) {
+      spawnSmokeParticle(cigPos.x, cigPos.y - 5);
+    }
+
+    for (let i = smokeParticles.length - 1; i >= 0; i--) {
+      const s = smokeParticles[i];
+      s.life -= s.decay;
+      if (s.life <= 0) { smokeParticles.splice(i, 1); continue; }
+      s.vx += (Math.random() - 0.5) * 0.05 + state.tiltX * 0.05;
+      s.vy *= 0.99;
+      s.x += s.vx;
+      s.y += s.vy;
+      s.size += s.growRate;
+      if (s.fadeIn && s.alpha < 0.25) s.alpha += 0.02;
+      else { s.fadeIn = false; s.alpha = Math.min(s.alpha, s.life * 0.35); }
+      ctx.save();
+      ctx.globalAlpha = s.alpha;
+      const sgrad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size);
+      sgrad.addColorStop(0, 'rgba(200,200,200,0.6)');
+      sgrad.addColorStop(0.5, 'rgba(150,150,150,0.3)');
+      sgrad.addColorStop(1, 'rgba(100,100,100,0)');
+      ctx.fillStyle = sgrad;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+  renderFrame();
+
+  document.addEventListener('touchmove', e => { e.preventDefault(); }, { passive: false });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); if (!state.isOpen) openLid(); else if (!state.isLit) ignite(); else closeLid(); }
+    if (e.code === 'Escape') closeLid();
+    if (e.code === 'KeyC') { if (state.concertMode) stopConcert(); else startConcert(); }
+  });
+
+  // Init
+  hint.textContent = 'Tap or swipe up to open · Shake to ignite 🔥';
+  showToast('Welcome to FlickIt! 🔥 Tap the lighter to begin');
+})();
 </script>
 </body>
 </html>
+
+
