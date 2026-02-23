@@ -1121,7 +1121,7 @@ function extinguish() {
   cigaretteWrap.classList.remove('visible');
   hint.textContent = state.isOpen ? 'Flick the wheel to ignite 🔥' : 'Swipe up to open · Flick wheel to light';
 }
-  // Swipe & tap on lighter - FIXED & CLEAN VERSION
+// Swipe & tap on lighter - FINAL FIXED VERSION
 let touchStartY = null;
 let touchStartX = null;
 
@@ -1143,7 +1143,7 @@ lighterContainer.addEventListener('touchend', e => {
   const dy = touchStartY - e.changedTouches[0].clientY;
   const dx = Math.abs(touchStartX - e.changedTouches[0].clientX);
 
-  // Swipe up (άνοιγμα + άναμμα)
+  // Swipe up: open or ignite
   if (dy > 20 && dx < 50) {
     if (!state.isOpen) {
       openLid();
@@ -1151,13 +1151,13 @@ lighterContainer.addEventListener('touchend', e => {
       ignite();
     }
   }
-  // Swipe down (κλείσιμο)
+  // Swipe down: close
   else if (dy < -20 && dx < 50) {
     if (state.isOpen) {
       closeLid();
     }
   }
-  // Tap (μικρή κίνηση → toggle)
+  // Tap: toggle lid
   else if (Math.abs(dy) < 15 && dx < 30) {
     if (!state.isOpen) {
       openLid();
@@ -1170,7 +1170,7 @@ lighterContainer.addEventListener('touchend', e => {
   touchStartX = null;
 }, { passive: false });
 
-// Extra: click fallback για καλύτερο handling
+// Click fallback for extra reliability
 lighterContainer.addEventListener('click', e => {
   e.preventDefault();
   if (!state.isOpen) {
