@@ -1172,15 +1172,7 @@ lighterContainer.addEventListener('touchend', e => {
   touchStartX = null;
 }, { passive: false });
 
-// Εξτρά: καλύτερο click handling για desktop ή όταν το touch δεν πιάνει
-lighterContainer.addEventListener('click', e => {
-  e.preventDefault();
-  if (!state.isOpen) {
-    openLid();
-  } else {
-    closeLid();
-  }
-});
+
 
 wheelGroup.addEventListener('click', e => {
   e.stopPropagation();
