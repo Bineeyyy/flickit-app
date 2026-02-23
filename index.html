@@ -1123,39 +1123,64 @@ function extinguish() {
 }
 
 // Wheel interaction
-let wheelStartY = null;
-let wheelDragDelta = 0;
+// Swipe detection on lighter body - ΒΕΛΤΙΩΜΕΝΗ ΕΚΔΟΣΗ
+let touchStartY = null;
+let touchStartX = null;
 
-const wheelGroup = document.getElementById('wheel-group');
-wheelGroup.addEventListener('touchstart', e => {
-  e.stopPropagation();
-  wheelStartY = e.touches[0].clientY;
-  wheelDragDelta = 0;
-}, { passive: true });
+lighterContainer.addEventListener('touchstart', e => {
+  if (e.touches.length !== 1) return;
+  touchStartY = e.touches[0].clientY;
+  touchStartX = e.touches[0].clientX;
+  e.preventDefault();           // ← Σταματάει το scroll/bounce
+}, { passive: false });         // ← passive: false είναι απαραίτητο για preventDefault
 
-wheelGroup.addEventListener('touchmove', e => {
-  if (wheelStartY === null) return;
-  e.stopPropagation();
-  const dy = wheelStartY - e.touches[0].clientY;
-  wheelDragDelta += Math.abs(dy - wheelDragDelta) * 0.4;
-  wheelAngle += dy * 0.8;
-  wheelSpin.setAttribute('transform', `translate(11,11) rotate(${wheelAngle})`);
-  wheelStartY = e.touches[0].clientY;
-}, { passive: true });
+lighterContainer.addEventListener('touchmove', e => {
+  if (touchStartY === null) return;
+  e.preventDefault();           // ← Πολύ σημαντικό για smooth swipe χωρίς scroll
+}, { passive: false });
 
-wheelGroup.addEventListener('touchend', e => {
-  e.stopPropagation();
-  if (!state.isOpen) { openLid(); return; }
-  if (Math.abs(wheelDragDelta) > 8) {
-    // Show spark effect
-    playSpark();
-    showSparkFx();
-    setTimeout(() => {
-      if (!state.isLit) ignite();
-    }, 200);
+lighterContainer.addEventListener('touchend', e => {
+  if (touchStartY === null) return;
+
+  const dy = touchStartY - e.changedTouches[0].clientY;
+  const dx = Math.abs(touchStartX - e.changedTouches[0].clientX);
+
+  // Swipe up (πιο εύκολο - threshold 20 pixels)
+  if (dy > 20 && dx < 50) {
+    if (!state.isOpen) {
+      openLid();
+    } else if (!state.isLit) {
+      ignite();
+    }
   }
-  wheelStartY = null;
-}, { passive: true });
+  // Swipe down (πιο εύκολο κλείσιμο)
+  else if (dy < -20 && dx < 50) {
+    if (state.isOpen) {
+      closeLid();
+    }
+  }
+  // Tap / μικρή κίνηση → toggle lid
+  else if (Math.abs(dy) < 15 && dx < 30) {
+    if (!state.isOpen) {
+      openLid();
+    } else {
+      closeLid();
+    }
+  }
+
+  touchStartY = null;
+  touchStartX = null;
+}, { passive: false });
+
+// Εξτρά: καλύτερο click handling για desktop ή όταν το touch δεν πιάνει
+lighterContainer.addEventListener('click', e => {
+  e.preventDefault();
+  if (!state.isOpen) {
+    openLid();
+  } else {
+    closeLid();
+  }
+});
 
 wheelGroup.addEventListener('click', e => {
   e.stopPropagation();
